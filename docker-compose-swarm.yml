@@ -1,0 +1,87 @@
+version: '3.2'
+services:
+    ldap:
+        image: introproventures/ldap
+        #build: ./ldap
+        ports:
+        - "11389:11389"
+        networks:
+        - app
+    mysql:
+        image: mysql
+        ports:
+        - 3306:3306
+        networks:
+        - app
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: activiti
+            MYSQL_USER: alfresco
+            MYSQL_PASSWORD: alfresco
+    mongodb:
+        image: mongo
+        ports:
+        - 27017:27017
+        # volumes:
+        # - /var/lib/mongodb:/data/db
+        networks:
+        - app
+
+    activiti:
+        image: introproventures/activiti_community_salesopps
+        ports:
+        - "8080:8080"
+        - "7800:7800"
+        - "8000:8000"
+        depends_on:
+        - 'mysql'
+        - 'salesopps'
+        networks:
+        - app
+        environment:
+            DB_HOST: mysql
+            DB_NAME: activiti
+            DB_USER: alfresco
+            DB_PASS: alfresco
+        environment:
+            JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n
+
+    salesopps:
+#        build: ./salesopps_image
+        image: introproventures/salesopps
+        ports:
+        - "8888:8888"
+        - "7801:7801"
+        - "5005:5005"
+        depends_on:
+        - 'mongodb'
+        - 'ldap'
+        networks:
+        - app
+        environment:
+            JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n
+    alfresco-one-comunity:
+        image: introproventures/alfresco_one_comunity
+        ports:
+        - "8081:8081"
+        - "7802:7802"
+        depends_on:
+        - 'salesopps'
+        networks:
+        - app
+
+
+
+networks:
+    app:
+       driver: overlay
+
+    # salesopps-bpm-automation:
+    #     image: introproventures/salesopps-bpm-automation
+    #     depends_on:
+    #     - 'salesopps'
+    #     - 'activiti'
+    #     network_mode: host
+    #     environment:
+    #         SO_AUTOMATION_PARAM: -CommunityTest
+
