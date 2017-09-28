@@ -60,15 +60,15 @@ services:
         - app
         environment:
             JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n
-    alfresco-one-comunity:
-        image: introproventures/alfresco_one_comunity
-        ports:
-        - "8081:8081"
-        - "7802:7802"
-        depends_on:
-        - 'salesopps'
-        networks:
-        - app
+#    alfresco-one-comunity:
+#        image: introproventures/alfresco_one_comunity
+#        ports:
+#        - "8081:8081"
+#        - "7802:7802"
+#        depends_on:
+#        - 'salesopps'
+#        networks:
+#        - app
 
 
 
