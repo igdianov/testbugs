@@ -1,0 +1,149 @@
+version: '3.2'
+#you have to run local registry first #docker service create --name registry --publish 5000:5000  registry
+services:
+    traefik:
+       image: traefik
+       # command: --web --docker --docker.swarmmode --docker.watch --docker.domain=traefik --logLevel=DEBUG
+       command: --web --docker --docker.swarmmode --docker.watch  --logLevel=DEBUG
+       ports:
+       - "80:80"
+       - "8082:8080"
+       - "443:443"
+       volumes:
+       - /var/run/docker.sock:/var/run/docker.sock
+       - /dev/null:/traefik.toml
+       deploy:
+         labels:
+         - "traefik.enable=false"
+       networks:
+       - traefik_public
+       deploy:
+        replicas: 1
+        placement:
+          constraints: [node.role == manager]                                                   
+        # restart_policy:
+          # condition: on-failure
+    ldap:
+        image: introproventures/ldap:latest
+        deploy:
+          labels:
+          - "traefik.enable=false"
+        ports:
+        - "11389:11389"
+        networks:
+        # - app
+        - traefik_public
+    mysql:
+        #image: mysql:latest
+        image: mysql
+        ports:
+        - 3306:3306
+        deploy:
+         labels:
+         - "traefik.enable=false"
+        networks:
+        # - app
+        - traefik_public
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: activiti
+            MYSQL_USER: alfresco
+            MYSQL_PASSWORD: alfresco
+    mongodb:
+        image: mongo:latest
+        deploy:
+          labels:
+          - "traefik.enable=false"
+        ports:
+        - 27017:27017
+        # volumes:
+        # - /var/lib/mongodb:/data/db
+        networks:
+        # - app
+        - traefik_public
+    activiti:
+        deploy:
+          labels:
+           - "traefik.enable=true"
+           - "traefik.backend=activiti"
+           - "traefik.port=8080"
+           - "traefik.frontend.rule=PathPrefix:/activiti-explorer"
+           - "traefik.backend.loadbalancer.sticky=true"
+           - "traefik.backend.loadbalancer.method=drr"
+           - "traefik.backend.loadbalancer.swarm=true"
+           - "traefik.docker.network=sa_traefik_public"
+        image: introproventures/activiti_community_salesopps:latest
+        #ports:
+        #- "8080:8080"
+        #- "7800:7800"
+        #- "8000:8000"
+        depends_on:
+        - 'mysql'
+        - 'salesopps'
+        networks:
+        # - app
+        - traefik_public
+        environment:
+            DB_HOST: mysql
+            DB_NAME: activiti
+            DB_USER: alfresco
+            DB_PASS: alfresco
+            JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n
+            JGROUPS_EXTERNAL_ADDR_COMMAND: ip r|grep 10.1.0.0|awk '{print $$NF}'
+    salesopps:
+        image: introproventures/salesopps:latest
+        #ports:
+        #- "8888:8888"
+        #- "7801:7801"
+        #- "5005:5005"
+        deploy:
+          labels:
+          - "traefik.frontend.rule=PathPrefix:/"  
+          - "traefik.backend.loadbalancer.sticky=true"
+          - "traefik.backend.loadbalancer.method=drr"
+          - "traefik.backend.loadbalancer.swarm=true"
+          - "traefik.docker.network=sa_traefik_public"
+          - "traefik.backend=salesopps"
+          - "traefik.port=8888"
+        depends_on:
+          - 'mongodb'
+          - 'ldap'
+        networks:
+          # - app
+          - traefik_public
+        environment:
+            JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n 
+            SERVER_USE_FORWARD_HEADERS: "true"
+            SERVER_PORT: 8888
+            SPRING_PROFILES_ACTIVE: "development"
+            APP_URL: "http://192.168.99.100" # TODO Externalize config
+            JGROUPS_EXTERNAL_ADDR_COMMAND: ip r|grep 10.1.0.0|awk '{print $$NF}'
+    gossip:
+        image: introproventures/jgroups-gossip:3.1.0.Final
+        ports:
+        - "12001:12001"
+        networks:
+        # - app
+        - traefik_public
+#    alfresco-one-comunity:
+#        image: introproventures/alfresco_one_comunity
+#        ports:
+#        - "8081:8081"
+#        - "7802:7802"
+#        depends_on:
+#        - 'salesopps'
+#        networks:
+#        - app
+networks:
+    # app:
+    #   driver: overlay
+    #   ipam:
+    #     driver: default
+    #     config:
+    #       - subnet: 10.101.0.0/16
+    traefik_public:
+      external: false
+      ipam:
+        driver: default
+        config:
+          - subnet: 10.1.0.0/16
