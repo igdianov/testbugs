@@ -117,6 +117,8 @@ services:
             SERVER_HOST: salesopps
             SERVER_PORT: 8888
             SPRING_PROFILES_ACTIVE: "development"
+            PWD_HOST_FQDN: ${PWD_HOST_FQDN}
+            PWD_IP_ADDRESS: ${PWD_IP_ADDRESS}
 #            APP_URL: "http://192.168.99.100" # TODO Externalize config
             APP_URL_COMMAND: echo http://pwd$${PWD_IP_ADDRESS//./-}-80.$$PWD_HOST_FQDN
             JGROUPS_EXTERNAL_ADDR_COMMAND: ip r|grep 10.1.0.0|awk '{print $$NF}'
