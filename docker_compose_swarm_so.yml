@@ -114,9 +114,11 @@ services:
         environment:
             JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n 
             SERVER_USE_FORWARD_HEADERS: "true"
+            SERVER_HOST: salesopps
             SERVER_PORT: 8888
             SPRING_PROFILES_ACTIVE: "development"
-            APP_URL: "http://192.168.99.100" # TODO Externalize config
+#            APP_URL: "http://192.168.99.100" # TODO Externalize config
+            APP_URL_COMMAND: echo http://pwd${PWD_IP_ADDRESS//./-}-80.$PWD_HOST_FQDN
             JGROUPS_EXTERNAL_ADDR_COMMAND: ip r|grep 10.1.0.0|awk '{print $$NF}'
     gossip:
         image: introproventures/jgroups-gossip:3.1.0.Final
