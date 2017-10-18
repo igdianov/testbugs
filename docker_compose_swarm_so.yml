@@ -111,17 +111,31 @@ services:
         networks:
           # - app
           - traefik_public
+        command: export PWD_HOST_FQDN_SO=`ip r |grep eth0|awk '{print $NF}'`
         environment:
             JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n 
             SERVER_USE_FORWARD_HEADERS: "true"
             SERVER_HOST: salesopps
             SERVER_PORT: 8888
             SPRING_PROFILES_ACTIVE: "development"
-            PWD_HOST_FQDN: ${PWD_HOST_FQDN}
+            PWD_HOST_FQDN_SO: ${PWD_HOST_FQDN_SO}
             PWD_IP_ADDRESS: ${PWD_IP_ADDRESS}
 #            APP_URL: "http://192.168.99.100" # TODO Externalize config
-            APP_URL_COMMAND: echo http://pwd$${PWD_IP_ADDRESS//./-}-80.$$PWD_HOST_FQDN
+            APP_URL_COMMAND: echo http://pwd$${PWD_IP_ADDRESS//./-}-80.$$PWD_HOST_FQDN_SO
             JGROUPS_EXTERNAL_ADDR_COMMAND: ip r|grep 10.1.0.0|awk '{print $$NF}'
+        entrypoint: &script
+            - sh
+            - -c
+            - |
+              ext_addr=$$(eval $$JGROUPS_EXTERNAL_ADDR_COMMAND)
+              FLAGS="$$FLAGS -DJGROUPS_EXTERNAL_ADDR=$$ext_addr"
+              app_url=$$(eval echo http://pwd$${HOST_IP//./-}-80.$$PWD_HOST_FQDN_SO)
+              FLAGS="$$FLAGS -DAPP_URL=$$app_url"
+              echo "FLAGS="$$FLAGS
+              echo date "FLAGS="$$FLAGS>/var/salesopps
+              while ! nc -z mongodb 27017;do echo "waiting for mongo" ; sleep 3;done
+              java $$FLAGS -Djava.security.egd=file:/dev/./urandom -jar salesopps-starter-0.0.1.jar
+              wait
     gossip:
         image: introproventures/jgroups-gossip:3.1.0.Final
         ports:
