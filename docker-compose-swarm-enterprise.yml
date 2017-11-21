@@ -78,7 +78,7 @@ services:
         #- "7800:7800"
         #- "8000:8000"
         volumes:
-        - /c/Users/user/.activiti/enterprise-license:/root/.activiti/enterprise-license/
+        - $(HOME)/.activiti/enterprise-license:/root/.activiti/enterprise-license/
         depends_on:
         - 'mysql'
         - 'salesopps'
