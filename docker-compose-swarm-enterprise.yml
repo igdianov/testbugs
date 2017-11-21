@@ -72,7 +72,7 @@ services:
            - "traefik.backend.loadbalancer.method=drr"
            - "traefik.backend.loadbalancer.swarm=true"
            - "traefik.docker.network=sa_traefik_public"
-        image: introproventures/activiti_enterprise_salesopps:local
+        image: introproventures/activiti_enterprise_salesopps:latest
         #ports:
         #- "8080:8080"
         #- "7800:7800"
@@ -93,7 +93,7 @@ services:
             JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n
             JGROUPS_EXTERNAL_ADDR_COMMAND: ip r|grep 10.1.0.0|awk '{print $$NF}'
     salesopps:
-        image: introproventures/salesopps:local
+        image: introproventures/salesopps:latest
         #ports:
         #- "8888:8888"
         #- "7801:7801"
