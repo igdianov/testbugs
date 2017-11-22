@@ -74,11 +74,11 @@ services:
            - "traefik.docker.network=sa_traefik_public"
         image: introproventures/activiti_enterprise_salesopps:latest
         ports:
-        - "8081:8080"
+        - "8080:8080"
         #- "7800:7800"
         #- "8000:8000"
         #volumes:
-        #- $(HOME)/.activiti/enterprise-license:/root/.activiti/enterprise-license/
+        #- /c/Users/user/.activiti/enterprise-license:/root/.activiti/enterprise-license/
         depends_on:
         - 'mysql'
         - 'salesopps'
