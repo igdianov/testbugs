@@ -126,8 +126,8 @@ services:
             JGROUPS_EXTERNAL_ADDR_COMMAND: ip r|grep 10.1.0.0|awk '{print $$NF}'
     gossip:
         image: 689735782597.dkr.ecr.us-west-2.amazonaws.com/jgroups-gossip:3.1.0.Final
-        ports:
-        - "12001:12001"
+     #   ports:
+     #   - "12001:12001"
         networks:
         # - app
         - traefik_public
