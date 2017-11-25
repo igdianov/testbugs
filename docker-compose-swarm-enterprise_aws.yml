@@ -94,8 +94,8 @@ services:
             JGROUPS_EXTERNAL_ADDR_COMMAND: ip r|grep 10.1.0.0|awk '{print $$NF}'
     salesopps:
         image: 689735782597.dkr.ecr.us-west-2.amazonaws.com/salesopps:latest
-        #ports:
-        #- "8888:8888"
+        ports:
+        - "8888:8888"
         #- "7801:7801"
         #- "5005:5005"
         deploy:
