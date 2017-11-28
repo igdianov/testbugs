@@ -20,7 +20,7 @@ cd play-with-docker
 
 go get -u github.com/golang/dep/cmd/dep
 ~/go/bin/dep ensure
-docker swarm init 
+sudo docker swarm init 
 sudo modprobe xt_ipvs
-docker pull  franela/dind:hybrid
-docker-compose up
+sudo docker pull  franela/dind:hybrid
+sudo docker-compose up
