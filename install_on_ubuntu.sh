@@ -3,7 +3,7 @@ set -e
 
 curl -fsSL get.docker.com -o get-docker.sh && sudo sh get-docker.sh
 sudo usermod -aG docker ubuntu
-sudo curl -o /usr/local/bin/docker-compose -L "https://github.com/docker/compose/releases/download/1.15.0/docker-compose-$(uname -s)-$(uname -m)
+sudo curl -o /usr/local/bin/docker-compose -L "https://github.com/docker/compose/releases/download/1.15.0/docker-compose-$(uname -s)-$(uname -m)"
 sudo chmod +x /usr/local/bin/docker-compose
 wget https://raw.githubusercontent.com/canha/golang-tools-install-script/master/goinstall.sh
 bash goinstall.sh --64
