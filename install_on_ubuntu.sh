@@ -15,9 +15,7 @@ export PATH=$PATH:$GOROOT/bin
 mkdir -p $HOME/go/src/github.com/play-with-docker 
 cd $HOME/go/src/github.com/play-with-docker
 git clone https://github.com/introproventures/play-with-docker.git
-
 cd play-with-docker
-
 go get -u github.com/golang/dep/cmd/dep
 ~/go/bin/dep ensure
 sudo docker swarm init 
