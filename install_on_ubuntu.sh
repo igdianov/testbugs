@@ -21,5 +21,6 @@ go get -u github.com/golang/dep/cmd/dep
 ~/go/bin/dep ensure
 sudo docker swarm init 
 sudo modprobe xt_ipvs
-sudo docker pull  franela/dind:hybrid
+#sudo docker pull  franela/dind:hybrid
+sudo docker pull  introproventures/dind
 sudo docker-compose up
