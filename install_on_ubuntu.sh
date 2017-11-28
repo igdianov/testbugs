@@ -25,5 +25,5 @@ sudo docker swarm init
 sudo modprobe xt_ipvs
 #sudo docker pull  franela/dind:hybrid
 sudo docker pull  introproventures/dind
-
+mv docker-compose.yml 1.yml;envsubst < "1.yml" > "docker-compose.yml";rm 1.yml
 sudo docker-compose up
