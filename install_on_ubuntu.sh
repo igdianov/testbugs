@@ -12,9 +12,8 @@ export GOPATH=$HOME/go
 export GOROOT=$HOME/.go
 export PATH=$PATH:$GOROOT/bin
 
-cd $HOME/go/src/github.com/
-mkdir play-with-docker 
-cd play-with-docker
+mkdir -p $HOME/go/src/github.com/play-with-docker 
+cd $HOME/go/src/github.com/play-with-docker
 git clone https://github.com/introproventures/play-with-docker.git
 
 cd play-with-docker
