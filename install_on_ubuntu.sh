@@ -19,7 +19,7 @@ git clone https://github.com/introproventures/play-with-docker.git
 cd play-with-docker
 
 go get -u github.com/golang/dep/cmd/dep
-dep ensure
+~/go/bin/dep ensure
 docker swarm init 
 sudo modprobe xt_ipvs
 docker pull  franela/dind:hybrid
