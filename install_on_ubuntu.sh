@@ -11,6 +11,7 @@ bash goinstall.sh --64
 export GOPATH=$HOME/go
 export GOROOT=$HOME/.go
 export PATH=$PATH:$GOROOT/bin
+source .bashrc
 
 mkdir -p $HOME/go/src/github.com/play-with-docker 
 cd $HOME/go/src/github.com/play-with-docker
