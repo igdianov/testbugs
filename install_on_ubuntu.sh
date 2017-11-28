@@ -7,11 +7,13 @@ sudo curl -o /usr/local/bin/docker-compose -L "https://github.com/docker/compose
 sudo chmod +x /usr/local/bin/docker-compose
 wget https://raw.githubusercontent.com/canha/golang-tools-install-script/master/goinstall.sh
 bash goinstall.sh --64
+. .bashrc
 cd $HOME/go
 mkdir play-with-docker 
 cd play-with-docker
 git clone https://github.com/introproventures/play-with-docker.git
 cd play-with-docker
+
 go get -u github.com/golang/dep/cmd/dep
 dep ensure
 docker swarm init 
