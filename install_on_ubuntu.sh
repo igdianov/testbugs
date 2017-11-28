@@ -8,17 +8,22 @@ sudo chmod +x /usr/local/bin/docker-compose
 wget https://raw.githubusercontent.com/canha/golang-tools-install-script/master/goinstall.sh
 bash goinstall.sh --64
 
-export GOPATH=$HOME/go
-export GOROOT=$HOME/.go
-export PATH=$PATH:$GOROOT/bin
-source .bashrc
+GOPATH=$HOME/go
+GOROOT=$HOME/.go
+PATH=$PATH:$GOROOT/bin
+export GOPATH
+export PATH
+export GOROOT
+env
+source /home/ubuntu/.bashrc
+env
 
 mkdir -p $HOME/go/src/github.com/play-with-docker 
 cd $HOME/go/src/github.com/play-with-docker
 git clone https://github.com/introproventures/play-with-docker.git
 cd play-with-docker
 go get -u github.com/golang/dep/cmd/dep
-~/go/bin/dep ensure
+dep ensure
 sudo docker swarm init 
 sudo modprobe xt_ipvs
 #sudo docker pull  franela/dind:hybrid
