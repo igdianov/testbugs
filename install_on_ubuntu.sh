@@ -7,7 +7,11 @@ sudo curl -o /usr/local/bin/docker-compose -L "https://github.com/docker/compose
 sudo chmod +x /usr/local/bin/docker-compose
 wget https://raw.githubusercontent.com/canha/golang-tools-install-script/master/goinstall.sh
 bash goinstall.sh --64
-. .bashrc
+
+export GOPATH=$HOME/go
+export GOROOT=$HOME/.go
+export PATH=$PATH:$GOROOT/bin
+
 cd $HOME/go
 mkdir play-with-docker 
 cd play-with-docker
