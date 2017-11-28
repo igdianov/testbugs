@@ -14,9 +14,6 @@ PATH=$PATH:$GOROOT/bin
 export GOPATH
 export PATH
 export GOROOT
-env
-source /home/ubuntu/.bashrc
-env
 
 mkdir -p $HOME/go/src/github.com/play-with-docker 
 cd $HOME/go/src/github.com/play-with-docker
@@ -28,4 +25,5 @@ sudo docker swarm init
 sudo modprobe xt_ipvs
 #sudo docker pull  franela/dind:hybrid
 sudo docker pull  introproventures/dind
+
 sudo docker-compose up
