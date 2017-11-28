@@ -26,4 +26,6 @@ sudo modprobe xt_ipvs
 #sudo docker pull  franela/dind:hybrid
 sudo docker pull  introproventures/dind
 mv docker-compose.yml 1.yml;envsubst < "1.yml" > "docker-compose.yml";rm 1.yml
+#change in docker-compose.yml ./haproxy to full path and demo.youbpm to something smart
+#change in haproxy.conf localhost to real path
 sudo docker-compose up
